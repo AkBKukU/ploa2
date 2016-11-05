@@ -11,7 +11,7 @@ DROP PROCEDURE IF EXISTS get_posts;
 CREATE PROCEDURE get_posts ( offset_in INTEGER, count_in INTEGER )
 BEGIN
 
-	SELECT posts.post_ref, posts.datetime_posted, posts.post_data 
+	SELECT posts.post_ref, posts.datetime_posted, posts.post_data, posts.title
 	FROM posts WHERE posts.published = 1 LIMIT offset_in, count_in;
 
 END ;
