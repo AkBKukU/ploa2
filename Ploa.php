@@ -13,9 +13,13 @@ class Ploa
 
 	private $dbh=NULL;
 
+	public static $INI=NULL;
+
 	public function __construct($host="", $user="", $pass="", $name="")
 	{
 		$this->dbSetLogin($host, $user, $pass, $name);
+
+		self::$INI = parse_ini_file(dirname(__FILE__).'/ploa.ini');
 	}
 
 	public function dbSetLogin($host, $user, $pass, $name)
