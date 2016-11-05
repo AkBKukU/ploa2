@@ -1,6 +1,6 @@
 <?php
 
-require_once($_SERVER['DOCUMENT_ROOT'].'/../inc/ploa2/Post.php');
+require_once(dirname(__FILE__).'/Post.php');
 
 class Ploa
 {
