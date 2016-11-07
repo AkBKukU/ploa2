@@ -24,9 +24,12 @@ class Post
 		$this->article = $this->dom->createElement("article","");
 		$header = $this->dom->createElement("header","");
 		$this->article->appendChild($header);
-
+		
+		$linkHeader = $this->dom->createElement("a");
+		$header->appendChild($linkHeader);
+		$linkHeader->setAttribute('href',Ploa::$INI['PLOA_POST_VIEW_URI'].$this->post_ref);
 		$mainHeader = $this->dom->createElement("h2",$this->title);
-		$header->appendChild($mainHeader);
+		$linkHeader->appendChild($mainHeader);
 		$subHeader = $this->dom->createElement("h3",$this->datetime_posted);
 		$header->appendChild($subHeader);
 		$body = $this->dom->createElement("div","");

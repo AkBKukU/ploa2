@@ -56,10 +56,19 @@ class Ploa
 		return $this->dbCall($this->PRO_getPosts,[$offset,$count],2);
 	}
 
-	public function getPostsArray($offset, $count)
+	public function partPostList($offset, $count)
 	{
-		// Call the stored procedure to get posts
-		return $this->dbCall($this->PRO_getPosts,[$offset,$count],2);
+		$dom = new DOMDocument();
+		$posts = $this->getPosts($offset, $count);
+		$postsDiv = $dom->createElement('div','');
+		$dom->appendChild($postsDiv);
+
+		foreach($posts as $post)
+		{
+			$postsDiv->appendChild($dom->importNode($post->getDOMElement(),true));
+		}
+
+		return $dom->documentElement;
 	}
 
 	private function dbConnect()
