@@ -6,6 +6,7 @@ class Ploa
 {
 	// Define procedures
 	public $PRO_getPosts = "get_posts";
+	public $PRO_getPostByRef = "get_post_by_ref";
 	private $dbhost='';
 	private $dbuser='';
 	private $dbpass='';
@@ -31,6 +32,31 @@ class Ploa
 		$this->dbname = $name;
 	}
 
+	public function getPost($ref)
+	{
+		// Get a connection to the db
+		$dbh = $this->dbConnect();
+		if($dbh)
+		{	
+			// Build query with a '?' for each supplied parameter
+			$query = 'call '.$this->PRO_getPostByRef.'(?)';
+			
+			// Create a statment to use the query
+			$stmt = $dbh->prepare($query);
+	
+			// Run the query with the given parameters
+			$stmt->execute([$ref]);
+
+			// Return the results
+			return $stmt->fetchAll(PDO::FETCH_CLASS,'Post');
+
+		
+		}
+
+		// Fail
+		return false;
+	}
+
 	public function getPosts($offset, $count)
 	{
 		// Get a connection to the db
@@ -52,23 +78,8 @@ class Ploa
 		
 		}
 
-		// Call the stored procedure to get posts
-		return $this->dbCall($this->PRO_getPosts,[$offset,$count],2);
-	}
-
-	public function partPostList($offset, $count)
-	{
-		$dom = new DOMDocument();
-		$posts = $this->getPosts($offset, $count);
-		$postsDiv = $dom->createElement('div','');
-		$dom->appendChild($postsDiv);
-
-		foreach($posts as $post)
-		{
-			$postsDiv->appendChild($dom->importNode($post->getDOMElement(),true));
-		}
-
-		return $dom->documentElement;
+		// Fail
+		return false;
 	}
 
 	private function dbConnect()
@@ -134,6 +145,37 @@ class Ploa
 			echo "It broke";
 		}
 	}
+
+	public function partPostList($offset, $count)
+	{
+		$dom = new DOMDocument();
+		$posts = $this->getPosts($offset, $count);
+		$postsDiv = $dom->createElement('div','');
+		$dom->appendChild($postsDiv);
+
+		foreach($posts as $post)
+		{
+			$postsDiv->appendChild($dom->importNode($post->getDOMElement(),true));
+		}
+
+		return $dom->documentElement;
+	}
+
+	public function partPost($ref)
+	{
+		$dom = new DOMDocument();
+		$post = $this->getPost($ref);
+		$postsDiv = $dom->createElement('div','');
+		$dom->appendChild($postsDiv);
+		$postsDiv->appendChild($dom->importNode($post[0]->getDOMElement(),true));
+		
+		return $dom->documentElement;
+	}
+
+
+
+
 }
+
 
 ?>

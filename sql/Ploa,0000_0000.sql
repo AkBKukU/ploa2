@@ -16,6 +16,7 @@ CREATE TABLE posts
 	datetime_posted DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
 	post_data TEXT NULL DEFAULT NULL,
 	published INTEGER NOT NULL DEFAULT 0,
-	PRIMARY KEY (id_post)
+	PRIMARY KEY (id_post),
+	UNIQUE KEY "post_ref" ("post_ref")
 );
 
